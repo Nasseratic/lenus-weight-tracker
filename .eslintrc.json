@@ -11,6 +11,7 @@
   "rules": {
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "unicorn/prefer-module": "off",
+    "no-underscore-dangle": "warn",
     "react/jsx-props-no-spreading": "off",
     "react/button-has-type": "off"
   },
@@ -47,6 +48,7 @@
           }
         ],
         "react/button-has-type": "off",
+        "no-underscore-dangle": "warn",
         "unicorn/filename-case": [
           "error",
           {
