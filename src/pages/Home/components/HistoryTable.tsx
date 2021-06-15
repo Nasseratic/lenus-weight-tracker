@@ -1,9 +1,21 @@
+import { Measurement } from "api/measurements";
 import Button from "components/Button";
+import { HappinessLevels } from "components/HappinessInput";
 import useCounter from "hooks/useCounter";
 import React from "react";
 
-const HistoryTable = () => {
-  const [page, next, previous] = useCounter(1, { min: 1 });
+const formatDate = (string: string) => new Date(string).toDateString();
+const happinessLevelToColor = {
+  [HappinessLevels.HAPPY]: "bg-green-200",
+  [HappinessLevels.NORMAL]: "bg-gray-200",
+  [HappinessLevels.SAD]: "bg-red-200",
+};
+
+const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
+  const [page, next, previous] = useCounter(1, {
+    min: 1,
+    max: data.length / 10,
+  });
 
   return (
     <div className="flex flex-col">
@@ -26,79 +38,60 @@ const HistoryTable = () => {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Name
+                    Date
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Title
+                    Weight (kg)
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Status
+                    Happiness Level
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Role
-                  </th>
-                  <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Edit</span>
+                    <span>Actions</span>
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {Array.from({ length: 30 })
-                  .fill("")
-                  .slice((30 / 10) * page, (30 / 10) * page + 10)
-                  .map((_, index) => (
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                              alt="fake"
-                            />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              Jane Cooper {index}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              jane.cooper@example.com
-                            </div>
+                {data.map((row) => (
+                  <tr key={row._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {formatDate(row.trackingDate)}
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          Regional Paradigm Technician
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          Optimization
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Admin
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Button className="text-indigo-600 hover:text-indigo-900">
-                          Edit
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {row.weight}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 capitalize inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          happinessLevelToColor[row.happinessLevel]
+                        } text-gray-800`}
+                      >
+                        {row.happinessLevel}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <Button className="text-indigo-600 hover:text-indigo-900">
+                        Edit
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
                 {/* More people... */}
               </tbody>
             </table>

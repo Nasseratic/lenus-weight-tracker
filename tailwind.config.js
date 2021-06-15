@@ -10,5 +10,9 @@ module.exports = {
     },
   },
   darkMode: "media",
-  plugins: [formsPlugin],
+  plugins: [
+    formsPlugin({
+      strategy: "class",
+    }),
+  ],
 };

@@ -1,15 +1,18 @@
+import { useGetAllMeasurements } from "hooks/useMeasurement";
 import React from "react";
 import HistoryChart from "./components/HistoryChart";
 import HistoryTable from "./components/HistoryTable";
 
 export default function Home() {
+  const { data, isLoading } = useGetAllMeasurements();
+  if (isLoading) return <h1>Loading..</h1>;
   return (
     <div>
       <div className="w-3/4 m-auto">
         <section className="shadow-lg">
-          <HistoryChart />
+          <HistoryChart data={data?.data ?? []} />
         </section>
-        <HistoryTable />
+        <HistoryTable data={data?.data ?? []} />
       </div>
     </div>
   );
