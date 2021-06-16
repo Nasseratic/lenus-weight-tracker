@@ -9,10 +9,14 @@ import { Measurement } from "api/measurements";
 import React from "react";
 
 const HistoryChart: React.FC<{ data: Measurement[] }> = ({ data }) => (
-  <XYChart height={300} xScale={{ type: "utc" }} yScale={{ type: "linear" }}>
+  <XYChart
+    height={300}
+    xScale={{ type: "utc" }}
+    yScale={{ type: "linear", zero: false }}
+  >
     <Axis orientation="bottom" />
     <Axis orientation="left" />
-    <Grid columns={false} numTicks={4} />
+    <Grid columns={false} numTicks={10} />
     <AnimatedLineSeries
       dataKey="Weight"
       data={data}
@@ -38,7 +42,9 @@ const HistoryChart: React.FC<{ data: Measurement[] }> = ({ data }) => (
           {(tooltipData?.nearestDatum?.datum as Measurement).weight}
           <br />
           <span className="text-center">
-            {(tooltipData?.nearestDatum?.datum as Measurement).createdAt}
+            {new Date(
+              (tooltipData?.nearestDatum?.datum as Measurement).trackingDate
+            ).toDateString()}
           </span>
         </div>
       )}

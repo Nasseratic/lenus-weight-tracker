@@ -2,9 +2,16 @@ import { Measurement } from "api/measurements";
 import Button from "components/Button";
 import { HappinessLevels } from "components/HappinessInput";
 import useCounter from "hooks/useCounter";
-import React from "react";
+import { useDeleteMeasurement, useEditMeasurement } from "hooks/useMeasurement";
+import React, { useState } from "react";
 
+const NUMBER_OF_ITEMS_PER_PAGE = 5;
+
+function paginate<T>(array: T[], pageSize: number, page: number) {
+  return array.slice((page - 1) * pageSize, page * pageSize);
+}
 const formatDate = (string: string) => new Date(string).toDateString();
+
 const happinessLevelToColor = {
   [HappinessLevels.HAPPY]: "bg-green-200",
   [HappinessLevels.NORMAL]: "bg-gray-200",
@@ -12,10 +19,16 @@ const happinessLevelToColor = {
 };
 
 const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
+  const [editableId, setEditableId] = useState("");
+  const { mutate: edit } = useEditMeasurement();
+  const { mutate: del } = useDeleteMeasurement();
   const [page, next, previous] = useCounter(1, {
     min: 1,
-    max: data.length / 10,
+    max: data.length / NUMBER_OF_ITEMS_PER_PAGE,
   });
+  const isEditable = (id: string | undefined) => editableId === id;
+  const toggleEdit = (id?: string) => () =>
+    setEditableId((old) => (old === id ? "" : id ?? ""));
 
   return (
     <div className="flex flex-col">
@@ -61,7 +74,7 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((row) => (
+                {paginate(data, NUMBER_OF_ITEMS_PER_PAGE, page).map((row) => (
                   <tr key={row._id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -72,8 +85,24 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {row.weight}
+                    <td className="whitespace-nowrap">
+                      <input
+                        onDoubleClick={toggleEdit(row._id)}
+                        readOnly={!isEditable(row._id)}
+                        value={row.weight}
+                        onChange={(event) => {
+                          edit({
+                            id: row._id ?? "",
+                            body: {
+                              ...row,
+                              weight: Number(event.target.value),
+                            },
+                          });
+                        }}
+                        className={`rounded-lg bg-white focus:outline-none px-6 py-4 ${
+                          isEditable(row._id) ? "shadow-lg bg-gray-50" : ""
+                        }`}
+                      />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -85,9 +114,22 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                       </span>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Button className="text-indigo-600 hover:text-indigo-900">
-                        Edit
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-items-start">
+                      <Button
+                        onClick={toggleEdit(row._id)}
+                        className={` rounded-lg text-indigo-600 hover:text-indigo-900 ${
+                          isEditable(row._id)
+                            ? " text-green-600 bg-green-200"
+                            : ""
+                        }`}
+                      >
+                        {isEditable(row._id) ? "Done" : "Edit"}
+                      </Button>
+                      <Button
+                        onClick={() => del(row._id)}
+                        className={`mx-3 rounded-lg bg-red-200 text-red-600 hover:text-red-900 `}
+                      >
+                        Delete
                       </Button>
                     </td>
                   </tr>

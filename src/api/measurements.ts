@@ -4,14 +4,14 @@ import httpDriver from "utils/httpDriver";
 
 export interface Measurement {
   _id?: string;
-  createdAt: string;
+  createdAt?: string;
   trackingDate: string;
   weight: number;
   happinessLevel: HappinessLevels;
 }
 
-export const getMeasurement = (): Promise<AxiosResponse<Measurement[]>> =>
-  httpDriver.get("/measurements");
+export const getMeasurement = async (): Promise<Measurement[]> =>
+  (await httpDriver.get<Measurement[]>("/measurements")).data;
 
 export const addMeasurement = (
   body: Measurement
@@ -25,3 +25,7 @@ export const editMeasurement = ({
   body: Partial<Measurement>;
 }): Promise<AxiosResponse<unknown>> =>
   httpDriver.patch(`/measurements/${id}`, body);
+
+export const deleteMeasurement = (
+  id: string
+): Promise<AxiosResponse<unknown>> => httpDriver.delete(`/measurements/${id}`);
