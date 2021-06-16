@@ -126,7 +126,7 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                         {isEditable(row._id) ? "Done" : "Edit"}
                       </Button>
                       <Button
-                        onClick={() => del(row._id)}
+                        onClick={() => del(row._id ?? "")}
                         className={`mx-3 rounded-lg bg-red-200 text-red-600 hover:text-red-900 `}
                       >
                         Delete
