@@ -2,8 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-.react-datepicker__input-container input {
-  @apply block w-full text-base md:text-sm bg-white border border-gray-300 rounded shadow-sm form-input;
+.loader {
+  border-top-color: #2c3236;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .react-datepicker__tab-loop {

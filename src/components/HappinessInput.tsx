@@ -9,7 +9,7 @@ export enum HappinessLevels {
 }
 
 type HappinessInputProperties = {
-  onChange: (value: HappinessLevels) => void;
+  onChange?: (value: HappinessLevels) => void;
 };
 
 const HappinessInput: React.FC<HappinessInputProperties> = ({ onChange }) => {
@@ -18,11 +18,11 @@ const HappinessInput: React.FC<HappinessInputProperties> = ({ onChange }) => {
   );
 
   useEffect(() => {
-    onChange(happinessLevel);
+    if (onChange) onChange(happinessLevel);
   }, [onChange, happinessLevel]);
 
   return (
-    <div className="flex justify-items-center m-auto">
+    <div className="flex justify-items-center m-auto py-5">
       <Button
         onClick={() => setHappinessLevel(HappinessLevels.HAPPY)}
         className="rounded-l text-3xl bg-green-500 hover:bg-green-500"

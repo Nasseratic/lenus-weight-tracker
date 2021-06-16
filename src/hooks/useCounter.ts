@@ -10,11 +10,12 @@ const useCounter = (
     max: POSITIVE_INFINITY,
     min: NEGATIVE_INFINITY,
   }
-): [number, VoidFunction, VoidFunction] => {
+): [number, VoidFunction, VoidFunction, (n: number) => void] => {
   const [counter, setCounter] = useState(initial);
   const countUp = (): void => setCounter((c) => (c + 1 > max ? c : c + 1));
   const countDown = (): void => setCounter((c) => (c - 1 < min ? c : c - 1));
-  return [counter, countUp, countDown];
+  const set = (number: number): void => setCounter(number);
+  return [counter, countUp, countDown, set];
 };
 
 export default useCounter;

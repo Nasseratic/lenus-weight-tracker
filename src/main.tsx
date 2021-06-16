@@ -1,5 +1,6 @@
 import App from "App";
 import React from "react";
+import "react-datepicker/dist/react-datepicker.css";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { GlobalStyles } from "twin.macro";
