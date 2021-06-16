@@ -12,6 +12,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^1.5.0",
     "@types/react-datepicker": "^3.1.8",
     "@visx/curve": "^1.7.0",
     "@visx/mock-data": "^1.7.0",

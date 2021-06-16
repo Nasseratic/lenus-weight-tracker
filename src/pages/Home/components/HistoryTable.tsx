@@ -90,6 +90,7 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                         onDoubleClick={toggleEdit(row._id)}
                         readOnly={!isEditable(row._id)}
                         value={row.weight}
+                        onFocus={({ target }) => target.select()}
                         onChange={(event) => {
                           edit({
                             id: row._id ?? "",
