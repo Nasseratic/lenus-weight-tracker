@@ -1580,7 +1580,7 @@
     "@types/react-dom" "*"
     prop-types "^15.5.10"
 
-"@visx/curve@1.7.0":
+"@visx/curve@1.7.0", "@visx/curve@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@visx/curve/-/curve-1.7.0.tgz#b8c8ae902de469ae43014c78ed9bfda8aed8137c"
   integrity sha512-n0/SHM4YXjke+aEinhHFZPLMxWu3jbqtvqzfGJyibX8OmbDjavk9P+MHfGokUcw0xHy6Ch3YTuwbYuvVw5ny9A==
