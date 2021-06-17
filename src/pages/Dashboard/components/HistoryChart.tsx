@@ -31,6 +31,7 @@ const HistoryChart: React.FC<{ data: Measurement[] }> = ({ data }) => (
       snapTooltipToDatumY
       showVerticalCrosshair
       showSeriesGlyphs
+      showDatumGlyph
       renderTooltip={({ tooltipData, colorScale }) => (
         <div>
           <div
@@ -40,8 +41,10 @@ const HistoryChart: React.FC<{ data: Measurement[] }> = ({ data }) => (
             }}
           >
             {tooltipData?.nearestDatum?.key}
+            {` ( ${
+              (tooltipData?.nearestDatum?.datum as Measurement).weight
+            }kg )`}
           </div>
-          {(tooltipData?.nearestDatum?.datum as Measurement).weight}
           <br />
           <span className="text-center">
             {new Date(

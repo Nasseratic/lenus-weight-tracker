@@ -6,15 +6,20 @@ import {
   Measurement,
 } from "api/measurements";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import useRequestWithToken from "./useRequestWithToken";
 
 export const QUERY_KEY = "measurement";
 
-export const useGetAllMeasurements = () => useQuery(QUERY_KEY, getMeasurement);
+export const useGetAllMeasurements = () => {
+  const getAll = useRequestWithToken(getMeasurement);
+  return useQuery(QUERY_KEY, getAll);
+};
 
 export const useAddMeasurement = () => {
   const queryClient = useQueryClient();
+  const add = useRequestWithToken(addMeasurement);
 
-  return useMutation(addMeasurement, {
+  return useMutation(add, {
     onSuccess: async () => {
       // Invalidate and refetch
       await queryClient.invalidateQueries(QUERY_KEY);

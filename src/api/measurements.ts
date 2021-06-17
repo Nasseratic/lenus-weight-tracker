@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { HappinessLevels } from "components/HappinessInput";
-import httpDriver from "utils/httpDriver";
+import httpDriver, { createRequestWithAccessToken } from "utils/httpDriver";
 
 export interface Measurement {
   _id?: string;
@@ -10,12 +10,18 @@ export interface Measurement {
   happinessLevel: HappinessLevels;
 }
 
-export const getMeasurement = async (): Promise<Measurement[]> =>
-  (await httpDriver.get<Measurement[]>("/measurements")).data;
+export const getMeasurement = createRequestWithAccessToken<Measurement[]>(
+  () => ({
+    url: "/measurements",
+  })
+);
 
-export const addMeasurement = (
-  body: Measurement
-): Promise<AxiosResponse<unknown>> => httpDriver.post("/measurements", body);
+export const addMeasurement = createRequestWithAccessToken(
+  (data: Measurement) => ({
+    url: "/measurements",
+    data,
+  })
+);
 
 export const editMeasurement = ({
   id,

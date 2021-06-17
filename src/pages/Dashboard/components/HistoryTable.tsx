@@ -27,8 +27,6 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
     max: data.length / NUMBER_OF_ITEMS_PER_PAGE,
   });
   const isEditable = (id: string | undefined) => editableId === id;
-  const toggleEdit = (id?: string) => () =>
-    setEditableId((old) => (old === id ? "" : id ?? ""));
 
   return (
     <div className="flex flex-col">
@@ -87,10 +85,10 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                     </td>
                     <td className="whitespace-nowrap">
                       <input
-                        onDoubleClick={toggleEdit(row._id)}
                         readOnly={!isEditable(row._id)}
                         value={row.weight}
                         onFocus={({ target }) => target.select()}
+                        onBlur={() => setEditableId("")}
                         onChange={(event) => {
                           edit({
                             id: row._id ?? "",
@@ -116,16 +114,30 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-items-start">
-                      <Button
-                        onClick={toggleEdit(row._id)}
-                        className={` rounded-lg text-indigo-600 hover:text-indigo-900 ${
-                          isEditable(row._id)
-                            ? " text-green-600 bg-green-200"
-                            : ""
-                        }`}
-                      >
-                        {isEditable(row._id) ? "Done" : "Edit"}
-                      </Button>
+                      {!isEditable(row._id) && (
+                        <Button
+                          onClick={() => setEditableId(row._id ?? "")}
+                          className={` rounded-lg text-indigo-600 hover:text-indigo-900 ${
+                            isEditable(row._id)
+                              ? " text-green-600 bg-green-200"
+                              : ""
+                          }`}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                      {isEditable(row._id) && (
+                        <Button
+                          onClick={() => setEditableId("")}
+                          className={` rounded-lg text-indigo-600 hover:text-indigo-900 ${
+                            isEditable(row._id)
+                              ? " text-green-600 bg-green-200"
+                              : ""
+                          }`}
+                        >
+                          Done
+                        </Button>
+                      )}
                       <Button
                         onClick={() => del(row._id ?? "")}
                         className={`mx-3 rounded-lg bg-red-200 text-red-600 hover:text-red-900 `}
