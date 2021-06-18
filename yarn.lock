@@ -1776,10 +1776,10 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/xychart@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.12.0.tgz#11d29961d24fe94eefdad97155321776fa0533dc"
-  integrity sha512-NnzKE+ZmoJvL0qaCC8aY5nDmtKPgte5/EWgPLvtbkiFOom0zoM0mo838+eThDGVxb3yDrOFNzpRVRJLKq0Nfhg==
+"@visx/xychart@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.13.0.tgz#1ada5ae66aacd0f29672cfb7ab10182d0d0bd196"
+  integrity sha512-51A3wiZBokbDmBVHKoBH/RYAWHCtvfhMGxZz9ReZLZINmgHtJqTyWJxTLslEgjGY4agMjj/wQzWqkPsiZHS4Sw==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/lodash" "^4.14.146"
