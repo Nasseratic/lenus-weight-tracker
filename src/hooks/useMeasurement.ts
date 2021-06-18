@@ -29,8 +29,9 @@ export const useAddMeasurement = () => {
 
 export const useEditMeasurement = () => {
   const queryClient = useQueryClient();
+  const edit = useRequestWithToken(editMeasurement);
 
-  return useMutation(editMeasurement, {
+  return useMutation(edit, {
     onMutate: async (edited) => {
       await queryClient.cancelQueries(QUERY_KEY);
 
@@ -40,8 +41,10 @@ export const useEditMeasurement = () => {
       queryClient.setQueryData<Measurement[]>(QUERY_KEY, (old) => {
         if (old) {
           const index = old?.findIndex((row) => row._id === edited.id);
+          console.log(edited.data);
+
           if (index >= 0) {
-            old.splice(index, 1, { ...old[index], ...edited.body });
+            old.splice(index, 1, { ...old[index], ...edited.data });
             return [...old];
           }
         }
@@ -58,8 +61,9 @@ export const useEditMeasurement = () => {
 
 export const useDeleteMeasurement = () => {
   const queryClient = useQueryClient();
+  const del = useRequestWithToken(deleteMeasurement);
 
-  return useMutation(deleteMeasurement, {
+  return useMutation(del, {
     onMutate: async (deletedId) => {
       await queryClient.cancelQueries(QUERY_KEY);
 

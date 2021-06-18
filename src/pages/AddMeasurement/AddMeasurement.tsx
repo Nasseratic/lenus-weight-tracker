@@ -2,7 +2,11 @@ import Button from "components/Button";
 import HappinessInput, { HappinessLevels } from "components/HappinessInput";
 import LoadingOrError from "components/LoadingOrError";
 import NumberInput from "components/NumberInput";
-import { useAddMeasurement, useGetAllMeasurements } from "hooks/useMeasurement";
+import {
+  useAddMeasurement,
+  useEditMeasurement,
+  useGetAllMeasurements,
+} from "hooks/useMeasurement";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { useHistory } from "react-router-dom";
@@ -17,20 +21,36 @@ function AddMeasurement() {
   const [happiness, setHappiness] = useState(HappinessLevels.NORMAL);
   const [date, setDate] = useState(new Date());
   const { mutate, isLoading, error } = useAddMeasurement();
-  if (isLoading || isLoadingMeasurements)
+  const { mutate: edit, isLoading: isLoadingEdit } = useEditMeasurement();
+
+  if (isLoading || isLoadingEdit || isLoadingMeasurements)
     return <LoadingOrError error={error as Error} />;
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        mutate(
-          {
-            weight: counter,
-            trackingDate: date.toISOString(),
-            happinessLevel: happiness,
-          },
-          { onSuccess: () => history.goBack() }
+        const body = {
+          weight: counter,
+          trackingDate: date.toISOString(),
+          happinessLevel: happiness,
+        };
+        const onSuccess = { onSuccess: () => history.goBack() };
+        const currentDayMeasurement = data?.find(
+          (r) =>
+            new Date(r.trackingDate).toDateString() ===
+            new Date().toDateString()
         );
+        if (currentDayMeasurement) {
+          edit(
+            {
+              id: currentDayMeasurement._id ?? "",
+              data: body,
+            },
+            onSuccess
+          );
+        } else {
+          mutate(body, onSuccess);
+        }
       }}
       className="flex flex-col py-5 items-center"
     >

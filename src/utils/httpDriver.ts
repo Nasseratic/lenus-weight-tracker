@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
+import { GetIdTokenClaimsOptions, IdToken } from "@auth0/auth0-react";
 import axios, { AxiosRequestConfig } from "axios";
 
 const httpDriver = axios.create({
@@ -10,11 +10,11 @@ export function createRequestWithAccessToken<T, ParametersType = any>(
   getOptions: (parameters: ParametersType) => AxiosRequestConfig
 ): (
   getAccessToken: (
-    options?: GetTokenSilentlyOptions | undefined
-  ) => Promise<string>
+    options?: GetIdTokenClaimsOptions | undefined
+  ) => Promise<IdToken>
 ) => (parameters: ParametersType) => Promise<T> {
   return (getAccessToken) => async (parameters) => {
-    const accessToken = await getAccessToken({ timeoutInSeconds: 1 });
+    const { __raw: accessToken } = await getAccessToken();
     const options = getOptions(parameters);
     return (
       await httpDriver({

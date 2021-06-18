@@ -1,4 +1,4 @@
-import { curveNatural } from "@visx/curve";
+import { curveMonotoneX } from "@visx/curve";
 import {
   AnimatedLineSeries,
   Axis,
@@ -20,7 +20,7 @@ const HistoryChart: React.FC<{ data: Measurement[] }> = ({ data }) => (
     <Grid columns={false} numTicks={10} />
     <AnimatedLineSeries
       dataKey="Weight"
-      curve={curveNatural}
+      curve={curveMonotoneX}
       data={data}
       yAccessor={({ weight }) => weight}
       xAccessor={({ trackingDate }) => new Date(trackingDate)}

@@ -22,23 +22,15 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
   const [editableId, setEditableId] = useState("");
   const { mutate: edit } = useEditMeasurement();
   const { mutate: del } = useDeleteMeasurement();
+
   const [page, next, previous] = useCounter(1, {
     min: 1,
-    max: data.length / NUMBER_OF_ITEMS_PER_PAGE,
+    max: Math.ceil(data.length / NUMBER_OF_ITEMS_PER_PAGE),
   });
   const isEditable = (id: string | undefined) => editableId === id;
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-center p-5">
-        <Button onClick={previous} className="rounded-l">
-          Previous
-        </Button>
-        <Button disabled>{page}</Button>
-        <Button onClick={next} className="rounded-r">
-          Next
-        </Button>
-      </div>
+    <div className="flex flex-col mt-10">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow-lg overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -84,24 +76,31 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
                       </div>
                     </td>
                     <td className="whitespace-nowrap">
-                      <input
-                        readOnly={!isEditable(row._id)}
-                        value={row.weight}
-                        onFocus={({ target }) => target.select()}
-                        onBlur={() => setEditableId("")}
-                        onChange={(event) => {
-                          edit({
-                            id: row._id ?? "",
-                            body: {
-                              ...row,
-                              weight: Number(event.target.value),
-                            },
-                          });
+                      <form
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          setEditableId("");
                         }}
-                        className={`rounded-lg bg-white focus:outline-none px-6 py-4 ${
-                          isEditable(row._id) ? "shadow-lg bg-gray-50" : ""
-                        }`}
-                      />
+                      >
+                        <input
+                          readOnly={!isEditable(row._id)}
+                          value={row.weight}
+                          onFocus={({ target }) => target.select()}
+                          onBlur={() => setEditableId("")}
+                          onChange={(event) => {
+                            edit({
+                              id: row._id ?? "",
+                              data: {
+                                ...row,
+                                weight: Number(event.target.value),
+                              },
+                            });
+                          }}
+                          className={`rounded-lg bg-white focus:outline-none px-6 py-4 ${
+                            isEditable(row._id) ? "shadow-lg bg-gray-50" : ""
+                          }`}
+                        />
+                      </form>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -152,6 +151,15 @@ const HistoryTable: React.FC<{ data: Measurement[] }> = ({ data }) => {
             </table>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center p-5">
+        <Button onClick={previous} className="rounded-l">
+          Previous
+        </Button>
+        <Button disabled>{page}</Button>
+        <Button onClick={next} className="rounded-r">
+          Next
+        </Button>
       </div>
     </div>
   );

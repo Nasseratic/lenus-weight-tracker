@@ -1,6 +1,5 @@
-import { AxiosResponse } from "axios";
 import { HappinessLevels } from "components/HappinessInput";
-import httpDriver, { createRequestWithAccessToken } from "utils/httpDriver";
+import { createRequestWithAccessToken } from "utils/httpDriver";
 
 export interface Measurement {
   _id?: string;
@@ -18,20 +17,21 @@ export const getMeasurement = createRequestWithAccessToken<Measurement[]>(
 
 export const addMeasurement = createRequestWithAccessToken(
   (data: Measurement) => ({
+    method: "POST",
     url: "/measurements",
     data,
   })
 );
 
-export const editMeasurement = ({
-  id,
-  body,
-}: {
-  id: string;
-  body: Partial<Measurement>;
-}): Promise<AxiosResponse<unknown>> =>
-  httpDriver.patch(`/measurements/${id}`, body);
+export const editMeasurement = createRequestWithAccessToken(
+  ({ id, data }: { id: string; data: Partial<Measurement> }) => ({
+    method: "PATCH",
+    url: `/measurements/${id}`,
+    data,
+  })
+);
 
-export const deleteMeasurement = (
-  id: string
-): Promise<AxiosResponse<unknown>> => httpDriver.delete(`/measurements/${id}`);
+export const deleteMeasurement = createRequestWithAccessToken((id: string) => ({
+  method: "DELETE",
+  url: `/measurements/${id}`,
+}));
