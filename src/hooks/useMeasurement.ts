@@ -41,7 +41,6 @@ export const useEditMeasurement = () => {
       queryClient.setQueryData<Measurement[]>(QUERY_KEY, (old) => {
         if (old) {
           const index = old?.findIndex((row) => row._id === edited.id);
-          console.log(edited.data);
 
           if (index >= 0) {
             old.splice(index, 1, { ...old[index], ...edited.data });

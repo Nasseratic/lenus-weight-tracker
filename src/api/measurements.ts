@@ -1,5 +1,5 @@
 import { HappinessLevels } from "components/HappinessInput";
-import { createRequestWithAccessToken } from "utils/httpDriver";
+import { createRequest } from "utils/createRequest";
 
 export interface Measurement {
   _id?: string;
@@ -9,29 +9,37 @@ export interface Measurement {
   happinessLevel: HappinessLevels;
 }
 
-export const getMeasurement = createRequestWithAccessToken<Measurement[]>(
+export const getMeasurement = createRequest<Measurement[]>(
   () => ({
     url: "/measurements",
-  })
+  }),
+  { withToken: true }
 );
 
-export const addMeasurement = createRequestWithAccessToken(
+export const addMeasurement = createRequest(
   (data: Measurement) => ({
     method: "POST",
     url: "/measurements",
     data,
-  })
+  }),
+  {
+    withToken: true,
+  }
 );
 
-export const editMeasurement = createRequestWithAccessToken(
+export const editMeasurement = createRequest(
   ({ id, data }: { id: string; data: Partial<Measurement> }) => ({
     method: "PATCH",
     url: `/measurements/${id}`,
     data,
-  })
+  }),
+  { withToken: true }
 );
 
-export const deleteMeasurement = createRequestWithAccessToken((id: string) => ({
-  method: "DELETE",
-  url: `/measurements/${id}`,
-}));
+export const deleteMeasurement = createRequest(
+  (id: string) => ({
+    method: "DELETE",
+    url: `/measurements/${id}`,
+  }),
+  { withToken: true }
+);
