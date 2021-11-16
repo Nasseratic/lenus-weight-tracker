@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.5.0",
-    "@types/react-datepicker": "^3.1.8",
+    "@types/react-datepicker": "^4.3.1",
     "@types/react-lottie": "^1.2.5",
     "@visx/curve": "^1.7.0",
     "@visx/mock-data": "^1.7.0",
